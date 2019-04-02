@@ -45,7 +45,7 @@ RUN Write-Host ('Downloading {0} ...' -f $env:GIT_DOWNLOAD_URL); \
 	$newPath = ('{0}\bin;{1}' -f 'C:\git\cmd;C:\git\mingw64\bin;C:\git\usr\bin;', $env:PATH); \
 	Write-Host ('Updating PATH: {0}' -f "$newPath"); \
 	# Nano Server does not have "[Environment]::SetEnvironmentVariable()"
-	setx /M PATH "$newPath" \
+	setx PATH "$newPath" /M \
 	\
 	Write-Host 'Verifying install ...'; \
 	Write-Host '  git --version'; git --version; \
