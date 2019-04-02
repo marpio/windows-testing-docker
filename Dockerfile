@@ -17,6 +17,12 @@ RUN Write-Host 'Enabling TLS 1.2 (https://githubengineering.com/crypto-removal-n
 	New-ItemProperty -Path ('{0}/Server' -f $tls12RegBase) -Name 'DisabledByDefault' -PropertyType DWORD -Value 0 -Force; \
 	New-ItemProperty -Path ('{0}/Server' -f $tls12RegBase) -Name 'Enabled' -PropertyType DWORD -Value 1 -Force
 
+RUN Write-Host 'Updating PATH ...'; \
+	$newPath = ('{0};{1}' -f 'C:\git\cmd;C:\git\mingw64\bin;C:\git\usr\bin;', $env:PATH); \
+	Write-Host ('Updating PATH: {0}' -f "$newPath"); \
+	# Nano Server does not have "[Environment]::SetEnvironmentVariable()"
+	setx /M PATH $newPath;
+
 # install MinGit (especially for "go get")
 # https://blogs.msdn.microsoft.com/visualstudioalm/2016/09/03/whats-new-in-git-for-windows-2-10/
 # "Essentially, it is a Git for Windows that was stripped down as much as possible without sacrificing the functionality in which 3rd-party software may be interested."
@@ -40,12 +46,6 @@ RUN Write-Host ('Downloading {0} ...' -f $env:GIT_DOWNLOAD_URL); \
 	\
 	Write-Host 'Removing ...'; \
 	Remove-Item git.zip -Force; \
-	\
-	Write-Host 'Updating PATH ...'; \
-	$newPath = ('{0};{1}' -f 'C:\git\cmd;C:\git\mingw64\bin;C:\git\usr\bin;', $env:PATH); \
-	Write-Host ('Updating PATH: {0}' -f "$newPath"); \
-	# Nano Server does not have "[Environment]::SetEnvironmentVariable()"
-	setx /M PATH $newPath; \
 	\
 	Write-Host 'Verifying install ...'; \
 	Write-Host '  git --version'; git --version; \
