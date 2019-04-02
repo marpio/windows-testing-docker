@@ -15,5 +15,5 @@ variables:
 steps:
 - script: |
     echo "docker build"
-    docker build isolation=hyperv -f Dockerfile -t $(imageName) .
+    docker build --isolation=hyperv -f Dockerfile -t $(imageName) .
   displayName: 'docker build'
